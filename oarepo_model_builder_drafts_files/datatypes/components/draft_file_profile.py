@@ -31,10 +31,10 @@ class DraftFileComponent(DataTypeComponent):
     affects = [DefaultsModelComponent]
 
     class ModelSchema(ma.Schema):
-        draft_file = ma.fields.Nested(get_draft_file_schema)
+        draft_files = ma.fields.Nested(get_draft_file_schema, attribute="draft-files", data_key="draft-files")
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
-        if self.is_draft_file_profile:
+        if self.is_draft_files_profile:
             # override class as it has to be a parent class
             section.config.setdefault("record", {})[
                 "class"
@@ -44,8 +44,8 @@ class DraftFileComponent(DataTypeComponent):
         if context["profile"] == "record":
             service = set_default(datatype, "service", {})
             service.setdefault("additional-args", ["files_service=service_thesis_file(app)", "draft_files_service=service_thesis_file_draft(app)"])
-        self.is_draft_file_profile = context["profile"] == "draft_file"
-        if not self.is_draft_file_profile:
+        self.is_draft_files_profile = context["profile"] == "draft_files"
+        if not self.is_draft_files_profile:
             return
 
         parent_record_datatype: DataType = context["parent_record"]

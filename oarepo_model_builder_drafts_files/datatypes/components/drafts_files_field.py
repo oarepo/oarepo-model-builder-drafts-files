@@ -15,7 +15,7 @@ class DraftFilesFieldModelComponent(FilesFieldModelComponent):
 
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        if context["profile"] == "draft_file":
+        if context["profile"] == "draft_files":
             record_class = datatype.definition["record"]["class"]
 
             files_field = set_default(datatype, "files-field", {})

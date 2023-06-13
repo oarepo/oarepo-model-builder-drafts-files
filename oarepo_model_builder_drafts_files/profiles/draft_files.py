@@ -7,8 +7,8 @@ from oarepo_model_builder.schema import ModelSchema
 from oarepo_model_builder.utils.dict import dict_get
 
 
-class DraftFileProfile(RecordProfile):
-    default_model_path = ["record", "draft_file"]
+class DraftFilesProfile(RecordProfile):
+    default_model_path = ["record", "draft-files"]
 
     def build(
         self,
@@ -27,7 +27,7 @@ class DraftFileProfile(RecordProfile):
         file_record = model.get_schema_section("files", model_path[:-1] + ["files"])
 
         file_profile = dict_get(model.schema, model_path)
-        file_profile.setdefault("type", "draft_file")
+        file_profile.setdefault("type", "draft_files")
 
         # pass the parent record as an extra context item. This will be handled by file-aware
         # components in their "prepare" method
@@ -40,7 +40,7 @@ class DraftFileProfile(RecordProfile):
             context={
                 "parent_record": parent_record,
                 "file_record": file_record,
-                "profile": "draft_file",
+                "profile": "draft_files",
                 "profile_module": "files",
             },
         )

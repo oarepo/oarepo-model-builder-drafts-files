@@ -23,9 +23,15 @@ record:
     use:
       - invenio_files
 
-  draft_file:
+  draft-files:
     use:
       - invenio
+
+profiles:
+  - record
+  - draft
+  - files
+  - draft_files
 
 settings:
   schema-server: 'local://'

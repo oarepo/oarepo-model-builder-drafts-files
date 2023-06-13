@@ -6,3 +6,7 @@ class FilesServiceConfigDisableUploadBuilder(InvenioBaseClassPythonBuilder):
     section = "service-config"
     template = "service-config-disable-upload"
 
+
+
+
+
