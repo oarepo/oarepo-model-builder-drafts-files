@@ -11,7 +11,7 @@ if test -d $VENV ; then
 	rm -rf $VENV
 fi
 
-oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL --profile record,draft,files,draft_file -vvv
+oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL -vvv
 python3 -m venv $VENV
 . $VENV/bin/activate
 pip install -U setuptools pip wheel

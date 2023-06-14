@@ -31,7 +31,7 @@ class DraftFileComponent(DataTypeComponent):
     affects = [DefaultsModelComponent]
 
     class ModelSchema(ma.Schema):
-        draft_files = ma.fields.Nested(get_draft_file_schema, attribute="draft-files", data_key="draft-files")
+        draft_files = ma.fields.Nested(get_draft_file_schema)
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if self.is_draft_files_profile:
@@ -40,12 +40,65 @@ class DraftFileComponent(DataTypeComponent):
                 "class"
             ] = datatype.parent_record.definition["record"]["class"]
 
+    def process_links(self, datatype, section: Section, **kwargs):
+        if self.is_record_profile:
+            for link in section.config["links_item"]:
+                if link.name == "files":
+                    section.config["links_item"].remove(link)
+            section.config["links_item"].append(
+                Link(
+                    name="files",
+                    link_class="ConditionalLink",
+                    link_args=['cond=is_record',
+                               'if_=RecordLink("{+api}/records/{id}/files")',
+                               'else_=RecordLink("{+api}/records/{id}/draft/files")' ],
+                    imports=[Import("invenio_records_resources.services.ConditionalLink"),
+                             Import("invenio_records_resources.services.RecordLink"),
+                             Import("invenio_drafts_resources.services.records.config.is_record"), ],
+                )
+            ),
+
+        if self.is_draft_files_profile:
+            if "links_search" in section.config:
+                section.config.pop("links_search")
+            # remove normal links and add
+            section.config["file_links_list"] = [
+                Link(
+                    name="self",
+                    link_class="RecordLink",
+                    link_args=['"{self.url_prefix}{id}/draft/files"'],
+                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                ),
+            ]
+
+            section.config.pop("links_item")
+            section.config["file_links_item"] = [
+                Link(
+                    name="self",
+                    link_class="FileLink",
+                    link_args=['"{self.url_prefix}{id}/draft/files/{key}"'],
+                    imports=[Import("invenio_records_resources.services.FileLink")], # NOSONAR
+                ),
+                Link(
+                    name="content",
+                    link_class="FileLink",
+                    link_args=['"{self.url_prefix}{id}/draft/files/{key}/content"'],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
+                ),
+                Link(
+                    name="commit",
+                    link_class="FileLink",
+                    link_args=['"{self.url_prefix}{id}/draft/files/{key}/commit"'],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
+                ),
+            ]
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if context["profile"] == "record":
             service = set_default(datatype, "service", {})
             service.setdefault("additional-args", ["files_service=service_thesis_file(app)", "draft_files_service=service_thesis_file_draft(app)"])
         self.is_draft_files_profile = context["profile"] == "draft_files"
-        if not self.is_draft_files_profile:
+        self.is_record_profile = context["profile"] == "record"
+        if not context["profile"] == "draft_files":
             return
 
         parent_record_datatype: DataType = context["parent_record"]
@@ -75,6 +128,7 @@ class DraftFileComponent(DataTypeComponent):
         record_metadata = set_default(datatype, "record-metadata", {})
         record_metadata.setdefault("base-classes", file_record_datatype.definition["record-metadata"]["base-classes"])
         record_metadata.setdefault("imports", file_record_datatype.definition["record-metadata"]["imports"])
+        record_metadata.setdefault("use-versioning", False)
 
         resource_config = set_default(datatype, "resource-config", {})
         file_record_url = file_record_datatype.definition["resource-config"][

@@ -23,7 +23,7 @@ record:
     use:
       - invenio_files
 
-  draft-files:
+  draft_files:
     use:
       - invenio
 
