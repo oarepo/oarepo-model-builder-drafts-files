@@ -50,10 +50,4 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
             )
             append_array(datatype, "service-config", "components", "DraftFilesComponent")
 
-            """
-            service.setdefault("additional-args", [
-                f'files_service=app.config["{file_record_datatype.definition["service"]["config-key"]}"](config=app.config["{file_record_datatype.definition["service-config"]["config-key"]}"]())',
-                f'draft_files_service=app.config["{datatype.definition["service"]["config-key"]}"](config=app.config["{datatype.definition["service-config"]["config-key"]}"]())',
-            ])
-            """
 

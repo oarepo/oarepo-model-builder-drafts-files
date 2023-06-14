@@ -95,7 +95,10 @@ class DraftFileComponent(DataTypeComponent):
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if context["profile"] == "record":
             service = set_default(datatype, "service", {})
-            service.setdefault("additional-args", ["files_service=service_thesis_file(app)", "draft_files_service=service_thesis_file_draft(app)"])
+            service.setdefault("additional-args", [
+                f'files_service=get_service("files")(app)',
+                f'draft_files_service=get_service("draft_files")(app)',
+            ])
         self.is_draft_files_profile = context["profile"] == "draft_files"
         self.is_record_profile = context["profile"] == "record"
         if not context["profile"] == "draft_files":
