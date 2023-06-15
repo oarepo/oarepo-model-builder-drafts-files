@@ -128,6 +128,7 @@ class DraftFileComponent(DataTypeComponent):
             "imports", [{"import": "invenio_records_resources.records.api.FileRecord"}]
         )
 
+
         record_metadata = set_default(datatype, "record-metadata", {})
         record_metadata.setdefault("base-classes", file_record_datatype.definition["record-metadata"]["base-classes"])
         record_metadata.setdefault("imports", file_record_datatype.definition["record-metadata"]["imports"])
