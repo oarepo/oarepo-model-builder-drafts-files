@@ -1,15 +1,13 @@
-from oarepo_model_builder.datatypes import DataTypeComponent, DataType
-from oarepo_model_builder.datatypes.components import RecordModelComponent
+from oarepo_model_builder.datatypes import DataType
+from oarepo_model_builder.datatypes.components import RecordMetadataModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
-from oarepo_model_builder.utils.python_name import base_name, split_base_name, split_package_base_name
-from oarepo_model_builder_drafts.datatypes import DraftDataType
 from oarepo_model_builder_drafts_files.datatypes import DraftFileDataType
-from oarepo_model_builder_files.datatypes.components import FilesRecordModelComponent
+from oarepo_model_builder_files.datatypes.components import FilesRecordMetadataModelComponent
 
 
-class DraftFilesRecordModelComponent(FilesRecordModelComponent):
+class DraftFilesRecordMetadataModelComponent(FilesRecordMetadataModelComponent):
     eligible_datatypes = [DraftFileDataType]
-    dependency_remap = RecordModelComponent
+    dependency_remap = RecordMetadataModelComponent
 
 
     def before_model_prepare(self, datatype, *, context, **kwargs):

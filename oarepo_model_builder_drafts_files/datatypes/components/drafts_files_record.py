@@ -17,26 +17,6 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
     depends_on = [
         ServiceModelComponent,
     ]
-    """
-        links_item = {
-        "self": ConditionalLink(
-            cond=is_record,
-            if_=RecordLink("{+api}/mocks/{id}"),
-            else_=RecordLink("{+api}/mocks/{id}/draft"),
-        ),
-        "self_html": ConditionalLink(
-            cond=is_record,
-            if_=RecordLink("{+ui}/mocks/{id}"),
-            else_=RecordLink("{+ui}/uploads/{id}"),
-        ),
-        "latest": RecordLink("{+api}/mocks/{id}/versions/latest"),
-        "latest_html": RecordLink("{+ui}/mocks/{id}/latest"),
-        "draft": RecordLink("{+api}/mocks/{id}/draft", when=is_record),
-        "record": RecordLink("{+api}/mocks/{id}", when=is_draft),
-        "publish": RecordLink("{+api}/mocks/{id}/draft/actions/publish", when=is_draft),
-        "versions": RecordLink("{+api}/mocks/{id}/versions"),
-    }
-    """
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if context["profile"] == "record":
@@ -49,5 +29,10 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
                 },
             )
             append_array(datatype, "service-config", "components", "DraftFilesComponent")
+            service = set_default(datatype, "service", {})
+            service.setdefault("additional-args", [
+                f'files_service=get_service("files")(app)',
+                f'draft_files_service=get_service("draft_files")(app)',
+            ])
 
 
