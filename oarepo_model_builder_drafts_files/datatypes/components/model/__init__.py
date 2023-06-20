@@ -1,4 +1,6 @@
 from oarepo_model_builder_drafts_files.datatypes.components.model.blueprints import DraftFilesBlueprintsModelComponent
+from oarepo_model_builder_drafts_files.datatypes.components.model.ext_resource import \
+    DraftFilesExtResourceModelComponent
 from oarepo_model_builder_drafts_files.datatypes.components.model.marshmallow import DraftFilesMarshmallowModelComponent
 from oarepo_model_builder_drafts_files.datatypes.components.model.pid import DraftFilesPIDModelComponent
 from oarepo_model_builder_drafts_files.datatypes.components.model.record import DraftFilesRecordModelComponent
@@ -17,5 +19,6 @@ __all__ = [
     "DraftFilesResourceModelComponent",
     "DraftFilesServiceModelComponent",
     "DraftFilesBlueprintsModelComponent",
-    "DraftFilesPIDModelComponent",]
+    "DraftFilesPIDModelComponent",
+    "DraftFilesExtResourceModelComponent",]
 

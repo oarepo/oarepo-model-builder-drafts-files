@@ -16,5 +16,10 @@ class DraftFilesBlueprintsModelComponent(BlueprintsModelComponent):
             "module",
             f"{file_record_datatype.definition['module']['qualified']}.views.{context['profile']}.api",
         )
+        app = set_default(datatype, "app-blueprint", {})
+        app.setdefault(
+            "module",
+            f"{file_record_datatype.definition['module']['qualified']}.views.{context['profile']}.app",
+        )
 
         super().before_model_prepare(datatype, context=context, **kwargs)
