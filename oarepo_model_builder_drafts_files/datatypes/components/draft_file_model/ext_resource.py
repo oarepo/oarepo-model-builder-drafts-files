@@ -1,8 +1,9 @@
-from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 import marshmallow as ma
-
-from oarepo_model_builder.datatypes.components import ExtResourceModelComponent, DefaultsModelComponent
-from oarepo_model_builder.datatypes.components.model.ext_resource import ExtResourceSchema
+from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
+from oarepo_model_builder.datatypes.components import DefaultsModelComponent
+from oarepo_model_builder.datatypes.components.model.ext_resource import (
+    ExtResourceSchema,
+)
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 
 
@@ -16,6 +17,7 @@ class DraftFilesExtResourceModelComponent(DataTypeComponent):
             attribute="ext-resource",
             data_key="ext-resource",
         )
+
     def process_ext_resource(self, datatype, section, **kwargs):
         if self.is_draft_files_profile:
             cfg = section.config
@@ -30,4 +32,3 @@ class DraftFilesExtResourceModelComponent(DataTypeComponent):
 
         ext.setdefault("generate", True)
         ext.setdefault("skip", False)
-

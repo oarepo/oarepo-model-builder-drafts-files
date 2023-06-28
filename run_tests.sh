@@ -7,8 +7,9 @@ VENV=".model_venv"
 if test -d ./build-tests/$MODEL; then
 	rm -rf ./build-tests/$MODEL
 fi
-if test -d $VENV ; then
-	rm -rf $VENV
+
+if test -d ./$VENV; then
+	rm -rf ./$VENV
 fi
 
 oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL -vvv

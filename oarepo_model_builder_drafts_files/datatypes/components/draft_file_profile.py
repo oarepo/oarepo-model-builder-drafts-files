@@ -6,12 +6,8 @@ from oarepo_model_builder.datatypes import (
     ModelDataType,
     Section,
 )
-from oarepo_model_builder.datatypes.components import (
-    DefaultsModelComponent,
-)
-from oarepo_model_builder.datatypes.components.model.utils import (
-    set_default,
-)
+from oarepo_model_builder.datatypes.components import DefaultsModelComponent
+from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
 
 
@@ -44,12 +40,18 @@ class DraftFileComponent(DataTypeComponent):
                 Link(
                     name="files",
                     link_class="ConditionalLink",
-                    link_args=['cond=is_record',
-                               'if_=RecordLink("{+api}/records/{id}/files")',
-                               'else_=RecordLink("{+api}/records/{id}/draft/files")' ],
-                    imports=[Import("invenio_records_resources.services.ConditionalLink"),
-                             Import("invenio_records_resources.services.RecordLink"),
-                             Import("invenio_drafts_resources.services.records.config.is_record"), ],
+                    link_args=[
+                        "cond=is_record",
+                        'if_=RecordLink("{+api}/records/{id}/files")',
+                        'else_=RecordLink("{+api}/records/{id}/draft/files")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.ConditionalLink"),
+                        Import("invenio_records_resources.services.RecordLink"),
+                        Import(
+                            "invenio_drafts_resources.services.records.config.is_record"
+                        ),
+                    ],
                 )
             ),
 
@@ -72,7 +74,9 @@ class DraftFileComponent(DataTypeComponent):
                     name="self",
                     link_class="FileLink",
                     link_args=['"{self.url_prefix}{id}/draft/files/{key}"'],
-                    imports=[Import("invenio_records_resources.services.FileLink")], # NOSONAR
+                    imports=[
+                        Import("invenio_records_resources.services.FileLink")
+                    ],  # NOSONAR
                 ),
                 Link(
                     name="content",
@@ -87,6 +91,7 @@ class DraftFileComponent(DataTypeComponent):
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
+
     def before_model_prepare(self, datatype, *, context, **kwargs):
         self.is_draft_files_profile = context["profile"] == "draft_files"
         self.is_record_profile = context["profile"] == "record"
@@ -100,6 +105,3 @@ class DraftFileComponent(DataTypeComponent):
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
-
-
-

@@ -1,7 +1,7 @@
-from oarepo_model_builder.datatypes.components import RecordModelComponent, ResourceModelComponent, \
-    ServiceModelComponent
-from oarepo_model_builder_drafts_files.datatypes import DraftFileDataType
+from oarepo_model_builder.datatypes.components import ServiceModelComponent
 from oarepo_model_builder_files.datatypes.components import FilesServiceModelComponent
+
+from oarepo_model_builder_drafts_files.datatypes import DraftFileDataType
 
 
 class DraftFilesServiceModelComponent(FilesServiceModelComponent):

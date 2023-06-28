@@ -1,7 +1,7 @@
 from oarepo_model_builder.datatypes import DataType
-from oarepo_model_builder.datatypes.components import MarshmallowModelComponent, PIDModelComponent, \
-    BlueprintsModelComponent
+from oarepo_model_builder.datatypes.components import BlueprintsModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+
 from oarepo_model_builder_drafts_files.datatypes import DraftFileDataType
 
 

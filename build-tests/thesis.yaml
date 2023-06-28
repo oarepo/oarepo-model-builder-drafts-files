@@ -23,9 +23,9 @@ record:
     use:
       - invenio_files
 
-  draft_files:
-    use:
-      - invenio
+  draft: {}
+
+  draft_files: {}
 
 profiles:
   - record

@@ -26,8 +26,8 @@ class DraftFilesProfile(RecordProfile):
         parent_record = model.get_schema_section("draft", model_path[:-1] + ["draft"])
         file_record = model.get_schema_section("files", model_path[:-1] + ["files"])
 
-        file_profile = dict_get(model.schema, model_path)
-        file_profile.setdefault("type", "draft_files")
+        draft_file_profile = dict_get(model.schema, model_path)
+        draft_file_profile.setdefault("type", "draft_files")
 
         # pass the parent record as an extra context item. This will be handled by file-aware
         # components in their "prepare" method
