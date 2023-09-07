@@ -1,13 +1,11 @@
 from oarepo_model_builder.datatypes.components.model.utils import set_default
-from oarepo_model_builder_files.datatypes import FileDataType
-
 from oarepo_model_builder_drafts.datatypes.components import DraftParentComponent
+from oarepo_model_builder_files.datatypes import FileDataType
 
 
 class DraftFilesParentComponent(DraftParentComponent):
     eligible_datatypes = [FileDataType]
     affects = [DraftParentComponent]
-
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if context["profile"] == "files":

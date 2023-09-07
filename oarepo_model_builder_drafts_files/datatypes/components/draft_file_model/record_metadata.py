@@ -14,9 +14,7 @@ class DraftFilesRecordMetadataModelComponent(FilesRecordMetadataModelComponent):
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         file_record_datatype: DataType = context["file_record"]
-        parent_file_record_prefix = file_record_datatype.definition["module"][
-            "prefix"
-        ]
+        parent_file_record_prefix = file_record_datatype.definition["module"]["prefix"]
         draft_file_record = set_default(datatype, "record", {})
         draft_file_record.setdefault("class", f"{parent_file_record_prefix}Draft")
         super().before_model_prepare(datatype, context=context, **kwargs)

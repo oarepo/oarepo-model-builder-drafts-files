@@ -4,11 +4,12 @@ from .draft_file_model import (
     DraftFilesExtResourceModelComponent,
     DraftFilesFieldModelComponent,
     DraftFilesMarshmallowModelComponent,
+    DraftFilesParentComponent,
     DraftFilesPIDModelComponent,
     DraftFilesRecordMetadataModelComponent,
     DraftFilesRecordModelComponent,
     DraftFilesResourceModelComponent,
-    DraftFilesServiceModelComponent, DraftFilesParentComponent,
+    DraftFilesServiceModelComponent,
 )
 from .draft_file_profile import DraftFileComponent
 from .draft_files_tests import (
