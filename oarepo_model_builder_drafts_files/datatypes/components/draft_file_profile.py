@@ -22,7 +22,7 @@ class DraftFileComponent(DataTypeComponent):
     affects = [DefaultsModelComponent]
 
     class ModelSchema(ma.Schema):
-        draft_files = ma.fields.Nested(get_draft_file_schema)
+        draft_files = ma.fields.Nested(get_draft_file_schema, data_key="draft-files", attribute="draft-files")
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if self.is_draft_files_profile:

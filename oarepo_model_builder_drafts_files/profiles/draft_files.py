@@ -8,7 +8,7 @@ from oarepo_model_builder.utils.dict import dict_get
 
 
 class DraftFilesProfile(RecordProfile):
-    default_model_path = ["record", "draft_files"]
+    default_model_path = ["record", "draft-files"]
 
     def build(
         self,
