@@ -34,7 +34,22 @@ class DraftFileComponent(DataTypeComponent):
             ] = datatype.parent_record.definition["record"]["class"]
 
     def process_links(self, datatype, section: Section, **kwargs):
+        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}")
+        if url_prefix[-1] != "/":
+            url_prefix += "/"
+
         if self.is_record_profile:
+            has_files = 'files' in datatype.definition
+            if not has_files:
+                return
+            try:
+                files_url_prefix = datatype.definition["files"]["resource-config"]["base-url"]
+            except KeyError:
+                files_url_prefix = f"{url_prefix}{{id}}/"
+            try:
+                draft_files_url_prefix = datatype.definition["draft-files"]["resource-config"]["base-url"]
+            except KeyError:
+                draft_files_url_prefix = f"{url_prefix}{{id}}/draft/"
             for link in section.config["links_item"]:
                 if link.name == "files":
                     section.config["links_item"].remove(link)
@@ -44,8 +59,8 @@ class DraftFileComponent(DataTypeComponent):
                     link_class="ConditionalLink",
                     link_args=[
                         "cond=is_record",
-                        'if_=RecordLink("{+api}/records/{id}/files")',
-                        'else_=RecordLink("{+api}/records/{id}/draft/files")',
+                        f'if_=RecordLink("{{+api}}{files_url_prefix}files")',
+                        f'else_=RecordLink("{{+api}}{draft_files_url_prefix}files")',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.ConditionalLink"),
@@ -58,6 +73,7 @@ class DraftFileComponent(DataTypeComponent):
             ),
 
         if self.is_draft_files_profile:
+
             if "links_search" in section.config:
                 section.config.pop("links_search")
             # remove normal links and add
@@ -65,7 +81,7 @@ class DraftFileComponent(DataTypeComponent):
                 Link(
                     name="self",
                     link_class="RecordLink",
-                    link_args=['"{self.url_prefix}{id}/draft/files"'],
+                    link_args=[f'"{{+api}}{url_prefix}files"'],
                     imports=[Import("invenio_records_resources.services.RecordLink")],
                 ),
             ]
@@ -75,7 +91,7 @@ class DraftFileComponent(DataTypeComponent):
                 Link(
                     name="self",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/draft/files/{key}"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}"'],
                     imports=[
                         Import("invenio_records_resources.services.FileLink")
                     ],  # NOSONAR
@@ -83,13 +99,13 @@ class DraftFileComponent(DataTypeComponent):
                 Link(
                     name="content",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/draft/files/{key}/content"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/content"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
                 Link(
                     name="commit",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/draft/files/{key}/commit"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/commit"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
