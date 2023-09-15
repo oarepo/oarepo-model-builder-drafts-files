@@ -34,20 +34,35 @@ class DraftFileComponent(DataTypeComponent):
             ] = datatype.parent_record.definition["record"]["class"]
 
     def process_links(self, datatype, section: Section, **kwargs):
-        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}")
-        if url_prefix[-1] != "/":
-            url_prefix += "/"
+        def add_backslah_if_missing(url):
+            if url[-1] != "/":
+                url += "/"
+            return url
+
+        url_prefix = add_backslah_if_missing(
+            datatype.definition["resource-config"]["base-url"].replace(
+                "<pid_value>", "{id}"
+            )
+        )
 
         if self.is_record_profile:
-            has_files = 'files' in datatype.definition
+            has_files = "files" in datatype.definition
             if not has_files:
                 return
             try:
-                files_url_prefix = datatype.definition["files"]["resource-config"]["base-url"]
+                files_url_prefix = add_backslah_if_missing(
+                    datatype.definition["files"]["resource-config"]["base-url"].replace(
+                        "<pid_value>", "{id}"
+                    )
+                )
             except KeyError:
                 files_url_prefix = f"{url_prefix}{{id}}/"
             try:
-                draft_files_url_prefix = datatype.definition["draft-files"]["resource-config"]["base-url"]
+                draft_files_url_prefix = add_backslah_if_missing(
+                    datatype.definition["draft-files"]["resource-config"][
+                        "base-url"
+                    ].replace("<pid_value>", "{id}")
+                )
             except KeyError:
                 draft_files_url_prefix = f"{url_prefix}{{id}}/draft/"
             for link in section.config["links_item"]:
@@ -73,7 +88,6 @@ class DraftFileComponent(DataTypeComponent):
             ),
 
         if self.is_draft_files_profile:
-
             if "links_search" in section.config:
                 section.config.pop("links_search")
             # remove normal links and add
