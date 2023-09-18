@@ -3,6 +3,13 @@ from io import BytesIO
 
 import pytest
 
+{{ vars.resource_config.class|generate_import }}
+{{ parent_record.resource_config.class|generate_import }}
+{{ file_record.resource_config.class|generate_import }}
+
+BASE_URL_DRAFT_FILES = {{ vars.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
+BASE_URL_FILES = {{ file_record.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
+BASE_URL = {{ parent_record.resource_config.class|base_name }}.url_prefix
 
 @pytest.fixture()
 def published_id(client, location, headers):
@@ -11,7 +18,7 @@ def published_id(client, location, headers):
 
     # Create a draft
     res = client.post(
-        "{{ parent_record.resource_config.base_url }}",
+        BASE_URL,
         headers=h,
         json={
             "metadata": {"title": "Test"},
@@ -22,7 +29,7 @@ def published_id(client, location, headers):
 
     # Initialize files upload
     res = client.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/draft/files", headers=h, json=[{"key": "test.pdf"}]
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files", headers=h, json=[{"key": "test.pdf"}]
     )
     assert res.status_code == 201
     assert res.json["entries"][0]["key"] == "test.pdf"
@@ -30,20 +37,20 @@ def published_id(client, location, headers):
 
     # Upload a file
     res = client.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/draft/files/test.pdf/content",
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/content",
         headers={"content-type": "application/octet-stream"},
         data=BytesIO(b"testfile"),
     )
     assert res.status_code == 200
 
     # Commit the file
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/files/test.pdf/commit", headers=h)
+    res = client.post(f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/commit", headers=h)
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
     assert res.json["status"] == "completed"
 
     # Publish the record
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     return id_
@@ -53,13 +60,13 @@ def test_files_publish_flow(client, search_clear, location, headers):
     """Test record creation."""
     h = headers
     # Create a draft
-    res = client.post("{{ parent_record.resource_config.base_url }}", headers=h, json={"metadata": {"title": "Test"}})
+    res = client.post(BASE_URL, headers=h, json={"metadata": {"title": "Test"}})
     assert res.status_code == 201
     id_ = res.json["id"]
 
     # Initialize files upload
     res = client.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/draft/files", headers=h, json=[{"key": "test.pdf"}]
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files", headers=h, json=[{"key": "test.pdf"}]
     )
     assert res.status_code == 201
     assert res.json["entries"][0]["key"] == "test.pdf"
@@ -67,38 +74,38 @@ def test_files_publish_flow(client, search_clear, location, headers):
 
     # Upload a file
     res = client.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/draft/files/test.pdf/content",
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/content",
         headers={"content-type": "application/octet-stream"},
         data=BytesIO(b"testfile"),
     )
     assert res.status_code == 200
 
     # Commit the file
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/files/test.pdf/commit", headers=h)
+    res = client.post(f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/commit", headers=h)
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
     assert res.json["status"] == "completed"
 
     # Publish the record
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     # Check published files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=h)
+    res = client.get(f"{BASE_URL_FILES.replace('{id}', id_)}/files", headers=h)
     assert res.status_code == 200
     assert res.json["entries"][0]["key"] == "test.pdf"
     assert res.json["entries"][0]["status"] == "completed"
 
     # Edit the record
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft", headers=h)
     assert res.status_code == 201
 
     # Publish again
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     # Check published files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=h)
+    res = client.get(f"{BASE_URL_FILES.replace('{id}', id_)}/files", headers=h)
     assert res.status_code == 200
     assert res.json["entries"][0]["key"] == "test.pdf"
     assert res.json["entries"][0]["status"] == "completed"
@@ -109,7 +116,7 @@ def test_metadata_only_record(client, search_clear, location, headers):
     h = headers
     # Create a draft
     res = client.post(
-        "{{ parent_record.resource_config.base_url }}",
+        BASE_URL,
         headers=h,
         json={"metadata": {"title": "Test"}, "files": {"enabled": False}},
     )
@@ -117,25 +124,25 @@ def test_metadata_only_record(client, search_clear, location, headers):
     id_ = res.json["id"]
 
     # Publish the record
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     # Check published files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=h)
+    res = client.get(f"{BASE_URL_FILES.replace('{id}', id_)}/files", headers=h)
     assert res.status_code == 200
     assert res.json["enabled"] is False
     assert "entries" not in res.json
 
     # Edit the record
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft", headers=h)
     assert res.status_code == 201
 
     # Publish again
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     # Check published files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=h)
+    res = client.get(f"{BASE_URL_FILES.replace('{id}', id_)}/files", headers=h)
     assert res.status_code == 200
     assert res.json["enabled"] is False
     assert "entries" not in res.json
@@ -147,22 +154,22 @@ def test_import_files(client, search_clear, location, headers, published_id):
     id_ = published_id
 
     # New version
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/versions", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/versions", headers=h)
     assert res.status_code == 201
     new_id = res.json["id"]
 
     # Check new version files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{new_id}/draft/files", headers=h)
+    res = client.get(f"{BASE_URL_DRAFT_FILES.replace('{id}', new_id)}/files", headers=h)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 0
 
     # Import files from previous version
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{new_id}/draft/actions/files-import", headers=h)
+    res = client.post(f"{BASE_URL}{new_id}/draft/actions/files-import", headers=h)
     assert res.status_code == 201
     assert res.content_type == "application/json"
 
     # Check new version files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{new_id}/draft/files", headers=h)
+    res = client.get(f"{BASE_URL_DRAFT_FILES.replace('{id}', new_id)}/files", headers=h)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 1
 
@@ -172,7 +179,7 @@ def test_import_files_metadata_only(client, search_clear, location, headers):
     h = headers
 
     res = client.post(
-        "{{ parent_record.resource_config.base_url }}",
+        BASE_URL,
         headers=h,
         json={"metadata": {"title": "Test"}, "files": {"enabled": False}},
     )
@@ -180,21 +187,21 @@ def test_import_files_metadata_only(client, search_clear, location, headers):
     id_ = res.json["id"]
 
     # Publish
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/publish", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=h)
     assert res.status_code == 202
 
     # New version
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/versions", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/versions", headers=h)
     assert res.status_code == 201
     new_id = res.json["id"]
 
     # Check new version files
-    res = client.get(f"{{ parent_record.resource_config.base_url }}{new_id}/draft/files", headers=h)
+    res = client.get(f"{BASE_URL_DRAFT_FILES.replace('{id}', new_id)}/files", headers=h)
     assert res.status_code == 200
     assert "entries" not in res.json
 
     # Import files from previous version
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{new_id}/draft/actions/files-import", headers=h)
+    res = client.post(f"{BASE_URL}{new_id}/draft/actions/files-import", headers=h)
     assert res.status_code == 400
 
 
@@ -203,7 +210,7 @@ def test_import_files_no_version(client, search_clear, location, headers):
     h = headers
 
     res = client.post(
-        "{{ parent_record.resource_config.base_url }}",
+        BASE_URL,
         headers=h,
         json={"metadata": {"title": "Test"}, "files": {"enabled": True}},
     )
@@ -211,5 +218,51 @@ def test_import_files_no_version(client, search_clear, location, headers):
     id_ = res.json["id"]
 
     # Cannot import files from a non-existing previous version
-    res = client.post(f"{{ parent_record.resource_config.base_url }}{id_}/draft/actions/files-import", headers=h)
+    res = client.post(f"{BASE_URL}{id_}/draft/actions/files-import", headers=h)
     assert res.status_code == 404
+
+def assert_published_record_file_links(id_, generated_links, site_hostname="127.0.0.1:5000"):
+    """Compare generated links to expected links."""
+    required_links = {
+        {% for link_name, link in test_constants.links_record_files.items() %}
+        "{{ link_name }}": f"{{ link }}",
+        {% endfor %}
+    }
+    assert required_links.items() <= generated_links.items()
+
+def assert_published_file_links(id_, generated_links, site_hostname="127.0.0.1:5000"):
+    """Compare generated links to expected links."""
+    required_links = {
+        {% for link_name, link in test_constants.links_files.items() %}
+        "{{ link_name }}": f"{{ link }}",
+        {% endfor %}
+    }
+    assert required_links.items() <= generated_links.items()
+
+def test_published_links(
+    app,
+    client,
+    input_data,
+    headers,
+):
+    res = client.post(BASE_URL, json=input_data)
+    id_ = res.json["id"]
+    client.post(
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files",
+        headers=headers,
+        json=[
+            {"key": "test.pdf", "title": "Test file"},
+        ],
+    )
+    client.put(
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/content",
+        headers={"content-type": "application/octet-stream"},
+        data=BytesIO(b"testfile"),
+    )
+    client.post(
+        f"{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/commit", headers=headers
+    )
+    client.post(f"{BASE_URL}{id_}/draft/actions/publish", headers=headers)
+    res = client.get(f"{BASE_URL_FILES.replace('{id}', id_)}/files", headers=headers)
+    assert_published_record_file_links(id_, res.json["links"])
+    assert_published_file_links(id_, res.json["entries"][0]["links"])
