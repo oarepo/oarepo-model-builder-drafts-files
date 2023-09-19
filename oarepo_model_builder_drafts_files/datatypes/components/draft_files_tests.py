@@ -16,6 +16,16 @@ class DraftFilesModelTestComponent(DraftModelTestComponent):
         section.constants["revision_id2"] = 8
         section.constants["revision_id3"] = 13
 
+        section.constants["links_record_files"] = {
+            "self": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files",
+        }
+
+        section.constants["links_files"] = {
+            "self": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf",
+            "content": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/content",
+            "commit": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/commit",
+        }
+
 
 class DraftFilesFilesModelTestComponent(FilesModelTestComponent):
     eligible_datatypes = [ModelDataType]
@@ -24,3 +34,12 @@ class DraftFilesFilesModelTestComponent(FilesModelTestComponent):
     def process_files_tests(self, datatype, section, **extra_kwargs):
         super().process_files_tests(datatype, section, **extra_kwargs)
         section.constants["skip_continous_disable_files_test"] = True
+        section.constants["links_record_files"][
+            "self"
+        ] = "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files"
+        section.constants["files_base_url_placeholder"] = "BASE_URL_DRAFT_FILES"
+        section.constants["links_files"] = {
+            "self": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf",
+            "content": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/content",
+            "commit": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/commit",
+        }
