@@ -11,10 +11,10 @@ class DraftFilesFieldModelComponent(FilesFieldModelComponent):
     dependency_remap = FilesFieldModelComponent
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        if context["profile"] not in {"files", "draft_files"}:
+        if datatype.root.profile not in {"files", "draft_files"}:
             return
         files_field = set_default(datatype, "files-field", {})
-        if context["profile"] == "draft_files":
+        if datatype.root.profile == "draft_files":
             record_class = datatype.definition["record"]["class"]
             files_field.setdefault("file-class", base_name(record_class))
             files_field.setdefault("field-args", ["store=False", "delete=False"])
@@ -28,7 +28,7 @@ class DraftFilesFieldModelComponent(FilesFieldModelComponent):
                 ],
             )
 
-        if context["profile"] == "files":
+        if datatype.root.profile == "files":
             files_field.setdefault(
                 "field-args", ["store=False", "create=False", "delete=False"]
             )

@@ -8,7 +8,7 @@ class DraftFilesParentComponent(DraftParentComponent):
     affects = [DraftParentComponent]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        if context["profile"] == "files":
+        if datatype.root.profile == "files":
             draft_parent_record = set_default(datatype, "draft-parent-record", {})
             draft_parent_record_metadata = set_default(
                 datatype, "draft-parent-record-metadata", {}

@@ -28,16 +28,16 @@ class DraftFileComponent(DataTypeComponent):
         )
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
-        if self.is_draft_files_profile:
+        if datatype.root.profile == "draft_files":
             # override class as it has to be a parent class
             section.config.setdefault("record", {})[
                 "class"
-            ] = datatype.parent_record.definition["record"]["class"]
+            ] = datatype.draft_record.definition["record"]["class"]
 
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
 
-        if self.is_record_profile:
+        if datatype.root.profile == "record":
             has_files = "files" in datatype.definition
             if not has_files:
                 return
@@ -75,7 +75,7 @@ class DraftFileComponent(DataTypeComponent):
                 )
             ),
 
-        if self.is_draft_files_profile:
+        if datatype.root.profile == "draft_files":
             if "links_search" in section.config:
                 section.config.pop("links_search")
             # remove normal links and add
@@ -113,13 +113,11 @@ class DraftFileComponent(DataTypeComponent):
             ]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        self.is_draft_files_profile = context["profile"] == "draft_files"
-        self.is_record_profile = context["profile"] == "record"
-        if not context["profile"] == "draft_files":
+        if not datatype.root.profile == "draft_files":
             return
 
-        parent_record_datatype: DataType = context["parent_record"]
-        datatype.parent_record = parent_record_datatype
+        draft_record_datatype: DataType = context["draft_record"]
+        datatype.draft_record = draft_record_datatype
 
         set_default(datatype, "search-options", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
