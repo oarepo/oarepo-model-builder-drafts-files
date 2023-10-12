@@ -4,12 +4,12 @@ from io import BytesIO
 import pytest
 
 {{ vars.resource_config.class|generate_import }}
-{{ parent_record.resource_config.class|generate_import }}
+{{ metadata_record.resource_config.class|generate_import }}
 {{ file_record.resource_config.class|generate_import }}
 
 BASE_URL_DRAFT_FILES = {{ vars.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
 BASE_URL_FILES = {{ file_record.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
-BASE_URL = {{ parent_record.resource_config.class|base_name }}.url_prefix
+BASE_URL = {{ metadata_record.resource_config.class|base_name }}.url_prefix
 
 @pytest.fixture()
 def published_id(client_with_credentials, location, headers):

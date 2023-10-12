@@ -19,14 +19,13 @@ class DraftFilesExtResourceModelComponent(DataTypeComponent):
         )
 
     def process_ext_resource(self, datatype, section, **kwargs):
-        if self.is_draft_files_profile:
+        if datatype.root.profile == "draft_files":
             cfg = section.config
             cfg["ext-service-name"] = "service_draft_files"
             cfg["ext-resource-name"] = "resource_draft_files"
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        self.is_draft_files_profile = context["profile"] == "draft_files"
-        if not self.is_draft_files_profile:
+        if not datatype.root.profile == "draft_files":
             return
         ext = set_default(datatype, "ext-resource", {})
 

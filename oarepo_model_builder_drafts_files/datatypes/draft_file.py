@@ -13,6 +13,6 @@ class DraftFileDataType(ModelDataType):
         )
 
     def prepare(self, context):
-        self.parent_record = context["parent_record"]
+        self.draft_record = context["draft_record"]
         self.file_record = context["file_record"]
         super().prepare(context)

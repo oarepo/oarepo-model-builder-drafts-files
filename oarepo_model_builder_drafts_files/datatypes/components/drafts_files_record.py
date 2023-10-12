@@ -13,7 +13,7 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
     ]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        if context["profile"] == "record":
+        if datatype.root.profile == "record":
             append_array(
                 datatype,
                 "service-config",

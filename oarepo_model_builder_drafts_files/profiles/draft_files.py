@@ -23,7 +23,7 @@ class DraftFilesProfile(RecordProfile):
         # from cache. It files profile is called the first, then this will call prepare({})
         # on the record and will take some time (no files will be generated, only class names
         # allocated)
-        parent_record = model.get_schema_section("draft", model_path[:-1] + ["draft"])
+        draft_record = model.get_schema_section("draft", model_path[:-1] + ["draft"])
         file_record = model.get_schema_section("files", model_path[:-1] + ["files"])
 
         draft_file_profile = dict_get(model.schema, model_path)
@@ -38,7 +38,7 @@ class DraftFilesProfile(RecordProfile):
             output_directory=output_directory,
             builder=builder,
             context={
-                "parent_record": parent_record,
+                "draft_record": draft_record,
                 "file_record": file_record,
                 "profile": "draft_files",
                 "profile_module": "files",
