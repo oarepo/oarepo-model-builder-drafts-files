@@ -17,13 +17,13 @@ class DraftFilesModelTestComponent(DraftModelTestComponent):
         section.constants["revision_id3"] = 13
 
         section.constants["links_record_files"] = {
-            "self": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files",
+            "self": "https://{site_hostname}/api{base_urls['base_files_url'].replace('{id}', id_)}/files",
         }
 
         section.constants["links_files"] = {
-            "self": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf",
-            "content": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/content",
-            "commit": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/commit",
+            "self": "https://{site_hostname}/api{base_urls['base_files_url'].replace('{id}', id_)}/files/test.pdf",
+            "content": "https://{site_hostname}/api{base_urls['base_files_url'].replace('{id}', id_)}/files/test.pdf/content",
+            "commit": "https://{site_hostname}/api{base_urls['base_files_url'].replace('{id}', id_)}/files/test.pdf/commit",
         }
 
 
@@ -36,10 +36,10 @@ class DraftFilesFilesModelTestComponent(FilesModelTestComponent):
         section.constants["skip_continous_disable_files_test"] = True
         section.constants["links_record_files"][
             "self"
-        ] = "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files"
-        section.constants["files_base_url_placeholder"] = "BASE_URL_DRAFT_FILES"
+        ] = "https://{site_hostname}/api{base_files_url.replace('{id}', id_)}/files"
+        section.constants["files_base_url_placeholder"] = "base_draft_files_url"
         section.constants["links_files"] = {
-            "self": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf",
-            "content": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/content",
-            "commit": "https://{site_hostname}/api{BASE_URL_DRAFT_FILES.replace('{id}', id_)}/files/test.pdf/commit",
+            "self": "https://{site_hostname}/api{base_files_url.replace('{id}', id_)}/files/test.pdf",
+            "content": "https://{site_hostname}/api{base_files_url.replace('{id}', id_)}/files/test.pdf/content",
+            "commit": "https://{site_hostname}/api{base_files_url.replace('{id}', id_)}/files/test.pdf/commit",
         }
