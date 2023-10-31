@@ -17,13 +17,8 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
             append_array(
                 datatype,
                 "service-config",
-                "imports",
-                {
-                    "import": "invenio_drafts_resources.services.records.components.DraftFilesComponent"
-                },
-            )
-            append_array(
-                datatype, "service-config", "components", "DraftFilesComponent"
+                "components",
+                "invenio_drafts_resources.services.records.components.DraftFilesComponent",
             )
             service = set_default(datatype, "service", {})
             service.setdefault(
