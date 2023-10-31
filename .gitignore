@@ -12,7 +12,7 @@ __pycache__/
 .Python
 env/
 venv/
-.venv/
+.venv*/
 .model_venv/
 build/
 develop-eggs/
@@ -91,3 +91,5 @@ dist/
 .model_venv
 /tests/test
 /thesis/
+
+build-tests/thesis

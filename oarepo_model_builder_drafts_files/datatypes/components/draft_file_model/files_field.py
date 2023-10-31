@@ -15,18 +15,16 @@ class DraftFilesFieldModelComponent(FilesFieldModelComponent):
             return
         files_field = set_default(datatype, "files-field", {})
         if datatype.root.profile == "draft_files":
-            record_class = datatype.definition["record"]["class"]
-            files_field.setdefault("file-class", base_name(record_class))
+            files_field.setdefault("file-class", datatype.definition["record"]["class"])
             files_field.setdefault("field-args", ["store=False", "delete=False"])
-            files_field.setdefault(
-                "imports",
-                [
-                    {
-                        "import": "invenio_records_resources.records.systemfields.FilesField"
-                    },
-                    {"import": record_class},
-                ],
-            )
+            # files_field.setdefault(
+            #     "imports",
+            #     [
+            #         {
+            #             "import": "invenio_records_resources.records.systemfields.FilesField"
+            #         },
+            #     ],
+            # )
 
         if datatype.root.profile == "files":
             files_field.setdefault(

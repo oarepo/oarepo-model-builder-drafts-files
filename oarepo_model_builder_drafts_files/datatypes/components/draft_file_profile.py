@@ -2,10 +2,10 @@ import marshmallow as ma
 from oarepo_model_builder.datatypes import (
     DataType,
     DataTypeComponent,
-    Import,
     ModelDataType,
     Section,
 )
+from oarepo_model_builder.utils.python_name import Import
 from oarepo_model_builder.datatypes.components import DefaultsModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
