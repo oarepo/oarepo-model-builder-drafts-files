@@ -5,14 +5,14 @@ OAREPO_VERSION=${OAREPO_VERSION:-11}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
 
 BUILDER_VENV=".venv-builder"
-#if test -d $BUILDER_VENV ; then
-#	rm -rf $BUILDER_VENV
-#fi
-#
-#python3 -m venv $BUILDER_VENV
+if test -d $BUILDER_VENV ; then
+	rm -rf $BUILDER_VENV
+fi
+
+python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
-#pip install -U setuptools pip wheel
-#pip install -e .
+pip install -U setuptools pip wheel
+pip install -e .
 
 
 MODEL="thesis"
