@@ -18,7 +18,7 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
                 datatype,
                 "service-config",
                 "components",
-                "invenio_drafts_resources.services.records.components.DraftFilesComponent",
+                "{{invenio_drafts_resources.services.records.components.DraftFilesComponent}}",
             )
             service = set_default(datatype, "service", {})
             service.setdefault(
