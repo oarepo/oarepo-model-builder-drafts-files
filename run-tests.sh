@@ -5,8 +5,15 @@ OAREPO_VERSION=${OAREPO_VERSION:-11}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
 
 BUILDER_VENV=".venv-builder"
+MODEL="thesis"
+VENV=".venv-tests"
+
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
+fi
+
+if test -d ./build-tests/$MODEL; then
+	rm -rf ./build-tests/$MODEL
 fi
 
 python3 -m venv $BUILDER_VENV
@@ -14,19 +21,12 @@ python3 -m venv $BUILDER_VENV
 pip install -U setuptools pip wheel
 pip install -e .
 
-
-MODEL="thesis"
-VENV=".venv-tests"
-
-if test -d ./build-tests/$MODEL; then
-	rm -rf ./build-tests/$MODEL
-fi
+oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL -vvv
 
 if test -d ./$VENV; then
 	rm -rf ./$VENV
 fi
 
-oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL -vvv
 python3 -m venv $VENV
 . $VENV/bin/activate
 pip install -U setuptools pip wheel
