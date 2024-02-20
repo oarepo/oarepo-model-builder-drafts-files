@@ -119,7 +119,10 @@ class DraftFileComponent(DataTypeComponent):
         draft_record_datatype: DataType = context["draft_record"]
         datatype.draft_record = draft_record_datatype
 
-        set_default(datatype, "search-options", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
-        set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
+        set_default(datatype, "pid", {}).setdefault("skip", True)
+        set_default(datatype, "search-options", {}).setdefault("skip", True)
+        set_default(datatype, "record-item", {}).setdefault("skip", True)
+        set_default(datatype, "record-list", {}).setdefault("skip", True)
+        set_default(datatype, "permissions", {}).setdefault("skip", True)
