@@ -17,6 +17,7 @@ from .draft_files_tests import (
     DraftFilesModelTestComponent,
 )
 from .drafts_files_record import InvenioDraftsFilesRecordComponent
+from .published_service import DraftFilesPublishedServiceComponent, FilesPublishedServiceComponent
 
 DRAFTS_FILES_COMPONENTS = [
     DraftFilesFieldModelComponent,
@@ -34,4 +35,6 @@ DRAFTS_FILES_COMPONENTS = [
     DraftFilesBlueprintsModelComponent,
     DraftFilesExtResourceModelComponent,
     DraftFilesParentComponent,
+    DraftFilesPublishedServiceComponent,
+    FilesPublishedServiceComponent,
 ]
