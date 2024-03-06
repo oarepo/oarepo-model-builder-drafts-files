@@ -19,8 +19,6 @@ python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install -e .
-editable_install /home/ron/prace/oarepo-model-builder-new
-editable_install /home/ron/prace/oarepo-model-builder-files
 
 oarepo-compile-model ./build-tests/$MODEL.yaml --output-directory ./build-tests/$MODEL -vvv
 
