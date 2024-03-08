@@ -5,11 +5,11 @@ from oarepo_model_builder.datatypes import (
     ModelDataType,
     Section,
 )
-from oarepo_model_builder.utils.python_name import Import
 from oarepo_model_builder.datatypes.components import DefaultsModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
 from oarepo_model_builder.utils.links import url_prefix2link
+from oarepo_model_builder.utils.python_name import Import
 
 
 def get_draft_file_schema():
@@ -30,9 +30,9 @@ class DraftFileComponent(DataTypeComponent):
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if datatype.root.profile == "draft_files":
             # override class as it has to be a parent class
-            section.config.setdefault("record", {})[
-                "class"
-            ] = datatype.draft_record.definition["record"]["class"]
+            section.config.setdefault("record", {})["class"] = (
+                datatype.draft_record.definition["record"]["class"]
+            )
 
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])

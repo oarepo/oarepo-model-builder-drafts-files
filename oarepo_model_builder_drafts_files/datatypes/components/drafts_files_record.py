@@ -23,6 +23,6 @@ class InvenioDraftsFilesRecordComponent(DataTypeComponent):
             service = set_default(datatype, "service", {})
             service.setdefault("additional-args", {})
             service["additional-args"] += [
-                    f"files_service=self.service_files",
-                    f"draft_files_service=self.service_draft_files",
-                ]
+                f"files_service=self.service_files",
+                f"draft_files_service=self.service_draft_files",
+            ]
