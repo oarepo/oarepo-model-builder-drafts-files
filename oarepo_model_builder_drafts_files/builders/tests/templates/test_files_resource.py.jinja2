@@ -249,7 +249,7 @@ def test_published_links(
         f"{base_urls['base_draft_files_url'].replace('{id}', id_)}/files",
         headers=headers,
         json=[
-            {"key": "test.pdf", "title": "Test file"},
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
         ],
     )
     client_with_credentials.put(
