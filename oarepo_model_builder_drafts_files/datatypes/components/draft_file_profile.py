@@ -61,7 +61,7 @@ class DraftFileComponent(DataTypeComponent):
                     name="files",
                     link_class="ConditionalLink",
                     link_args=[
-                        "cond=is_record",
+                        "cond=is_published_record",
                         f'if_=RecordLink("{{+api}}{files_url_prefix}files")',
                         f'else_=RecordLink("{{+api}}{draft_files_url_prefix}files")',
                     ],
@@ -69,7 +69,7 @@ class DraftFileComponent(DataTypeComponent):
                         Import("invenio_records_resources.services.ConditionalLink"),
                         Import("invenio_records_resources.services.RecordLink"),
                         Import(
-                            "invenio_drafts_resources.services.records.config.is_record"
+                            "oarepo_runtime.records.is_published_record"
                         ),
                     ],
                 )

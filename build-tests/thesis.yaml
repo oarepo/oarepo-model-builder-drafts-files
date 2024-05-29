@@ -9,7 +9,7 @@ record:
   module:
     qualified: thesis
   permissions:
-    presets: ['read_only']
+    presets: ['authenticated']
   use:
     - invenio
 
