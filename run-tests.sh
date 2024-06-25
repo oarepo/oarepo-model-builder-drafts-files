@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-OAREPO_VERSION=${OAREPO_VERSION:-11}
+OAREPO_VERSION=${OAREPO_VERSION:-12}
 
 BUILDER_VENV=".venv-builder"
 MODEL="thesis"
@@ -33,3 +33,5 @@ pip install "oarepo[tests]==${OAREPO_VERSION}.*"
 pip install "./build-tests/${MODEL}[tests]"
 
 pytest build-tests/$MODEL/tests
+
+pytest tests
