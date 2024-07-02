@@ -88,6 +88,11 @@ class DraftFileComponent(DataTypeComponent):
                 ),
             ]
 
+            ui_prefix = url_prefix2link(
+                datatype.definition["resource-config"]["base-html-url"]
+            )
+            ui_prefix = f"{ui_prefix}{{id}}/"
+
             section.config.pop("links_item")
             section.config["file_links_item"] = [
                 Link(
@@ -108,6 +113,12 @@ class DraftFileComponent(DataTypeComponent):
                     name="commit",
                     link_class="FileLink",
                     link_args=[f'"{{+api}}{url_prefix}files/{{key}}/commit"'],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
+                ),
+                Link(
+                    name="preview",
+                    link_class="FileLink",
+                    link_args=[f'"{{+ui}}{ui_prefix}files/{{key}}/preview"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
