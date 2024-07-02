@@ -89,7 +89,7 @@ class DraftFileComponent(DataTypeComponent):
             ]
 
             ui_prefix = url_prefix2link(
-                datatype.definition["resource-config"]["base-html-url"]
+                datatype.parent_record.definition["resource-config"]["base-html-url"]
             )
             ui_prefix = f"{ui_prefix}{{id}}/"
 
@@ -129,6 +129,7 @@ class DraftFileComponent(DataTypeComponent):
 
         draft_record_datatype: DataType = context["draft_record"]
         datatype.draft_record = draft_record_datatype
+        datatype.parent_record = context["parent_record"]
 
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)

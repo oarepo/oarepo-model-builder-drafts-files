@@ -12,6 +12,8 @@ record:
     presets: ['authenticated']
   use:
     - invenio
+  resource-config:
+    base-html-url: /docs/
 
   files:
     properties:
