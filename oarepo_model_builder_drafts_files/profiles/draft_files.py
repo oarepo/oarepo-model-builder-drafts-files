@@ -25,6 +25,7 @@ class DraftFilesProfile(RecordProfile):
         # allocated)
         draft_record = model.get_schema_section("draft", model_path[:-1] + ["draft"])
         file_record = model.get_schema_section("files", model_path[:-1] + ["files"])
+        parent_record = model.get_schema_section("record", model_path[:-1])
 
         draft_file_profile = dict_get(model.schema, model_path)
         draft_file_profile.setdefault("type", "draft_files")
@@ -40,6 +41,7 @@ class DraftFilesProfile(RecordProfile):
             context={
                 "draft_record": draft_record,
                 "file_record": file_record,
+                "parent_record": parent_record,
                 "profile": "draft_files",
                 "profile_module": "files",
                 "switch_profile": True,
