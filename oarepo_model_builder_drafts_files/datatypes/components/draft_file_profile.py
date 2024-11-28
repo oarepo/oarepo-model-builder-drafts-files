@@ -118,7 +118,7 @@ class DraftFileComponent(DataTypeComponent):
                 Link(
                     name="preview",
                     link_class="FileLink",
-                    link_args=[f'"{{+ui}}{ui_prefix}files/{{key}}/preview"'],
+                    link_args=[f'"{{+ui}}{ui_prefix}preview/files/{{key}}/preview"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
