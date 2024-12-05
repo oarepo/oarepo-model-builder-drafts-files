@@ -9,7 +9,7 @@ record:
   module:
     qualified: thesis
   permissions:
-    presets: ['authenticated']
+    presets: ['everyone']
   use:
     - invenio
   resource-config:
@@ -21,13 +21,17 @@ record:
         properties:
           title:
             type: fulltext
+    permissions:
+      presets: ['authenticated']
 
     use:
       - invenio_files
 
   draft: {}
 
-  draft-files: {}
+  draft-files:
+    permissions:
+      presets: ['authenticated']
 
 profiles:
   - record
