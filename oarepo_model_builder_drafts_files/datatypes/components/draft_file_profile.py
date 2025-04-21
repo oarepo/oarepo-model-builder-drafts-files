@@ -62,8 +62,8 @@ class DraftFileComponent(DataTypeComponent):
                     link_class="ConditionalLink",
                     link_args=[
                         "cond=is_published_record()",
-                        f'if_=RecordLink("{{+api}}{files_url_prefix}files", when=has_file_permission("list_files"))',
-                        f'else_=RecordLink("{{+api}}{draft_files_url_prefix}files", when=has_file_permission("list_files"))',
+                        f'if_=RecordLink("{{+api}}{files_url_prefix}files", when=has_file_permission("read_files"))',
+                        f'else_=RecordLink("{{+api}}{draft_files_url_prefix}files", when=has_file_permission("read_files"))',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.ConditionalLink"),
@@ -87,13 +87,11 @@ class DraftFileComponent(DataTypeComponent):
                     link_class="RecordLink",
                     link_args=[
                         f'"{{+api}}{url_prefix}files"',
-                        'when=has_file_permission("list_files")',
+                        'when=has_file_permission("read_files")',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.RecordLink"),
-                        Import(
-                            "oarepo_runtime.services.config.has_file_permission"
-                        ),
+                        Import("oarepo_runtime.services.config.has_file_permission"),
                     ],
                 ),
             ]
@@ -114,9 +112,7 @@ class DraftFileComponent(DataTypeComponent):
                     ],
                     imports=[
                         Import("invenio_records_resources.services.FileLink"),
-                        Import(
-                            "oarepo_runtime.services.config.has_file_permission"
-                        ),
+                        Import("oarepo_runtime.services.config.has_file_permission"),
                     ],  # NOSONAR
                 ),
                 Link(
@@ -128,9 +124,7 @@ class DraftFileComponent(DataTypeComponent):
                     ],
                     imports=[
                         Import("invenio_records_resources.services.FileLink"),
-                        Import(
-                            "oarepo_runtime.services.config.has_file_permission"
-                        ),
+                        Import("oarepo_runtime.services.config.has_file_permission"),
                     ],
                 ),
                 Link(
@@ -142,9 +136,7 @@ class DraftFileComponent(DataTypeComponent):
                     ],
                     imports=[
                         Import("invenio_records_resources.services.FileLink"),
-                        Import(
-                            "oarepo_runtime.services.config.has_file_permission"
-                        ),
+                        Import("oarepo_runtime.services.config.has_file_permission"),
                     ],
                 ),
                 Link(
